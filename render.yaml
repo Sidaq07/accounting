@@ -1,0 +1,22 @@
+services:
+  - type: web
+    name: business-booking-and-accounting
+    runtime: node
+    buildCommand: npm ci && npm run build
+    startCommand: npm run server
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ADMIN_USERNAME
+        sync: false
+      - key: ADMIN_PASSWORD
+        sync: false
+      - key: DATABASE_PATH
+        value: /var/data/rajindera.db
+    disk:
+      name: application-data
+      mountPath: /var/data
+      sizeGB: 1
