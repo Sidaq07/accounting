@@ -11,6 +11,7 @@ import { registerPaymentRoutes } from './routes/payments.js';
 import { registerReportRoutes } from './routes/reports.js';
 import { registerAuditRoutes } from './routes/audit.js';
 import { registerBackupRoutes } from './routes/backup.js';
+import { databaseReady } from './database.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -49,7 +50,12 @@ app.get('/{*splat}', (req, res) => {
 });
 
 // Start listening
-app.listen(PORT, () => {
-  console.log(`Backend Server running on port ${PORT}`);
-  console.log(`Production assets served from ${clientBuildPath}`);
-});
+databaseReady
+  .then(() => app.listen(PORT, () => {
+    console.log(`Backend Server running on port ${PORT}`);
+    console.log(`Production assets served from ${clientBuildPath}`);
+  }))
+  .catch(error => {
+    console.error('Database initialization failed:', error);
+    process.exit(1);
+  });

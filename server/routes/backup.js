@@ -1,6 +1,5 @@
-import db, { dbPath } from '../database.js';
+import db from '../database.js';
 import { authenticateToken } from '../auth.js';
-import fs from 'fs';
 
 // Helper to escape values for CSV
 function cleanCsvValue(val) {
@@ -120,16 +119,8 @@ export function registerBackupRoutes(app) {
     });
   });
 
-  // Download raw SQLite Database backup file
+  // Hosted Postgres has no local database file. Use the CSV exports above.
   app.get('/api/backup/database-file', authenticateToken, (req, res) => {
-    if (fs.existsSync(dbPath)) {
-      res.download(dbPath, 'rajindera_database_backup.db', (err) => {
-        if (err) {
-          res.status(500).json({ error: 'Failed to download database file.' });
-        }
-      });
-    } else {
-      res.status(404).json({ error: 'Database file not found.' });
-    }
+    res.status(410).json({ error: 'Database-file downloads are unavailable with hosted Postgres. Use CSV exports instead.' });
   });
 }

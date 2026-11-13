@@ -81,7 +81,7 @@ export default function SettingsView() {
           </div>
           <div className="flex justify-between items-center py-2">
             <span className="font-semibold text-slate-500">Database Engine</span>
-            <span className="font-bold text-blue-600">SQLite 3 (Persistent Local)</span>
+            <span className="font-bold text-blue-600">Neon Postgres (Cloud)</span>
           </div>
         </div>
       </div>
